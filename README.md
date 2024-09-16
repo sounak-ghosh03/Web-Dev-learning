@@ -61,7 +61,7 @@ Here are some of the resources I've been using to learn web development:
 -   **You Don't Know JS:** [https://github.com/getify/You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
 -   **CSS Tricks:** [https://css-tricks.com/](https://css-tricks.com/)
 -   **Frontend Mentor:** [https://www.frontendmentor.io/](https://www.frontendmentor.io/)
--   **UDEMY:** []()
+-   **UDEMY:** [https://www.udemy.com/share/1013gG3@nZESUhEeRDmN69eLsV9IE4nM6hC4Ki3jcFD-r1FaAwJnL4q3Kq0eEeHjtcRkQxieLw==/](https://www.udemy.com/share/1013gG3@nZESUhEeRDmN69eLsV9IE4nM6hC4Ki3jcFD-r1FaAwJnL4q3Kq0eEeHjtcRkQxieLw==/)
 -   **Chai aur Code:** [https://www.youtube.com/@chaiaurcode](https://www.youtube.com/@chaiaurcode)
 -   **CodeWithHarry:** [https://www.youtube.com/playlist?list=PLu0W_9lII9agq5TrH9XLIKQvv0iaF2X3w](https://www.youtube.com/playlist?list=PLu0W_9lII9agq5TrH9XLIKQvv0iaF2X3w)
 
