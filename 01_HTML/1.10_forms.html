@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>forms one</title>
+        <style>
+            body {
+                background-color: #414141;
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Forms ib HTML</h1>
+        <form
+            action="url"
+            method="GET"
+            accept-charset="UTF-8"
+            autocomplete="off"
+            enctype="text/plain "
+        >
+            <label for="fname"></label>
+            <input type="text" placeholder="First Name" name="" id="fname" />
+
+            <input type="reset" value="reset" />
+            <input type="password" name="" id="" />
+
+            <label for="lname"></label>
+            <input type="text" placeholder="Last Name" name="" id="lname" />
+            <select name="editors" id="">
+                <option value="vscode"></option>
+                <option value="sublime"></option>
+            </select>
+
+            <!--does the same thing but complicated process -->
+            <input list="text" name="editor" />
+            <datalist id="editors">
+                <option value="vscode"></option>
+                <option value="sublime"></option>
+            </datalist>
+
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>
