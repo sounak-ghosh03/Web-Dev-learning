@@ -7,8 +7,10 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #FFFFFF;
+    background: linear-gradient(270deg, #ec532c, #431fc4);
+    animation: gradientAnimation 10s ease infinite;
+    background-size: 400% 400%;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,10 +18,11 @@ body {
 }
 
 .container {
-    background-color: #1E1E1E;
+    background-color: #1e1e1e;
     padding: 20px;
     border-radius: 10px;
     width: 400px;
+    height: 200px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
@@ -41,23 +44,24 @@ input[type="text"] {
     background-color: #333333;
     border: none;
     border-radius: 5px;
-    color: #FFF;
+    color: #fff;
     outline: none;
 }
 
 button {
     width: 25%;
     padding: 10px;
-    background-color: #6200EA;
+    background-color: #6200ea;
     border: none;
     border-radius: 5px;
-    color: #FFF;
+    color: #fff;
+    font-size: 15px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #3700B3;
+    background-color: #3700b3;
 }
 
 #weather-info {
@@ -69,6 +73,17 @@ button:hover {
 }
 
 #error-message {
-    color: #FF5722;
+    color: #ff5722;
     margin-top: 20px;
 }
+@keyframes gradientAnimation {
+    0% { 
+        background-position: 100% 50%; 
+        } 
+    50% { 
+        background-position: 0% 50%; 
+        }
+    100% { 
+        background-position: 100% 50%;
+        }
+    }
