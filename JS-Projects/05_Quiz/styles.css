@@ -59,6 +59,8 @@ button {
 
 button:hover {
     background-color: #3700b3;
+    transition-duration: 500ms;
+    
 }
 
 .hidden {
