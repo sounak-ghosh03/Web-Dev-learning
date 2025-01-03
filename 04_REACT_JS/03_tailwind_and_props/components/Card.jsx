@@ -2,7 +2,7 @@ import React from "react";
 
 // function Card(props)     original syntax => passes all the props to the function
 
-// generally used syntax which only passes the required props to the function
+// this syntax only passes the required props to the function
 function Card({ username, btnText = "visit me" }) {
     console.log(username);
     return (
