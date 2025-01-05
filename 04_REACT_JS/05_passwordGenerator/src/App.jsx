@@ -7,7 +7,7 @@ function App() {
     const [password, setPassword] = useState("");
 
     // useref hook
-    const passwordRef=useRef(null)
+    const passwordRef = useRef(null);
     const passwordGenerator = useCallback(() => {
         let pass = "";
         let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -21,12 +21,12 @@ function App() {
         setPassword(pass);
     }, [length, numberAllowed, charAllowed, setPassword]);
 
-    const copyPasswordToClipboard=useCallback(()=>  {
-      passwordRef.current?.select();
-      // passwordRef.current?.setSelectionRange(0,10); can be used to select the specified range of the data
+    const copyPasswordToClipboard = useCallback(() => {
+        passwordRef.current?.select();
+        // passwordRef.current?.setSelectionRange(0,10); can be used to select the specified range of the data
 
-      window.navigator.clipboard.writeText(password)
-    },[password])
+        window.navigator.clipboard.writeText(password);
+    }, [password]);
 
     useEffect(() => {
         passwordGenerator();
@@ -47,7 +47,10 @@ function App() {
                     readOnly
                     ref={passwordRef}
                 />
-                <button onClick={copyPasswordToClipboard} className="outline-none bg-blue-700 text-white PY-3 PY-0.5 shrink-0">
+                <button
+                    onClick={copyPasswordToClipboard}
+                    className="outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0"
+                >
                     copy
                 </button>
             </div>
