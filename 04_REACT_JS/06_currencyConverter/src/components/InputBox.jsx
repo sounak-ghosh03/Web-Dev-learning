@@ -47,10 +47,10 @@ function InputBox({
                 >
                     {currencyOption.map((currency) => (
                         <option key={currency} value={currency}>
+                            {/* remember the key in loops in react */}
                             {currency}
                         </option>
-                    ))}{" "}
-                    {/*remember the key in loops in react */}
+                    ))}
                 </select>
             </div>
         </div>
