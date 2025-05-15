@@ -46,11 +46,6 @@ This repository documents my journey in learning web development. It will includ
 -   **Express.js:** Building RESTful APIs with Express.
 -   **Databases:** Learning about SQL and NoSQL databases like MongoDB and PostgreSQL.
 
-## Full-Stack Projects
-
--   **Project 1:** Simple website using HTML, CSS, and JavaScript.
--   **Project 2:** A to-do list application with React and Node.js.
--   **Project 3:** Full-stack eCommerce website with a database, API, and frontend.
 
 ## Resources
 
