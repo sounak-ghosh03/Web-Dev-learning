@@ -1,0 +1,19 @@
+{
+  "name": "data_modelling_and_validation",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "node"
+  ],
+  "license": "ISC",
+  "author": "Sounak Ghosh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.14.3"
+  }
+}
