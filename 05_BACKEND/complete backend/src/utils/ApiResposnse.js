@@ -6,3 +6,5 @@ class ApiError {
         this.success = statusCode < 400;
     }
 }
+
+export { ApiError };
