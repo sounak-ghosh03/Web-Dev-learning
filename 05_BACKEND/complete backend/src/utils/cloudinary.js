@@ -15,7 +15,8 @@ const uploadOnCloudinary = async (localFilePath) => {
             resource_type: "auto",
         });
         //file has been uploaded on cloudinary successfully
-        console.log("File uploaded on cloudinary successfully", response.url);
+        // console.log("File uploaded on cloudinary successfully", response.url);
+        fs.unlinkSync(localFilePath);
         return response;
     } catch (error) {
         fs.unlinkSync(localFilePath);   //remove the locally saved temporay file as the operation failed

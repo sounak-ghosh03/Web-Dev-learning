@@ -17,22 +17,24 @@ const registerUser = asyncHandler(async (req, res) => {
     //  return response
 
     // GET USER DATA FROM FRONTEND
-    const { name, email, username, password } = req.body;
+    const { fullname, email, username, password } = req.body;
 
     // VALIDATE USER DATA
-    if (fullname === "" || email === "" || username === "" || password === "") {
-        throw new ApiError(400, "Please fill all the fields");
+    if (
+        [fullname, email, username, password].some(
+            (field) => field?.trim() === ""
+        )
+    ) {
+        throw new ApiError(400, "All fields are required");
     }
-    // --->
-    //alternative approach
-    // if(
-    //     [fullname, email, username, password].some   ((field) => field?.trim() === "")
-    // ) {
+
+    // alternative approach --> 
+    // if (fullname === "" || email === "" || username === "" || password === "") {
     //     throw new ApiError(400, "Please fill all the fields");
     // }
 
     // CHECK IF USER ALREADY EXISTS
-    const existingUser = User.findOne({
+    const existingUser = await User.findOne({
         $or: [{ email }, { username }],
     });
 
@@ -41,9 +43,17 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // CHECK FOR IMAGES AND AVATAR
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    let coverImageLocalPath = "";          //optional field
+    if (
+        req.files &&
+        Array.isArray(req.files.coverImage) &&
+        req.files.coverImage.length > 0
+    ) {
+        coverImageLocalPath = req.files.coverImage[0].path;
+    }
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
+    const avatarLocalPath = req.files?.avatar[0]?.path;     //compulsory field
     if (!avatarLocalPath) {
         throw new ApiError(400, "Please upload both avatar");
     }
@@ -58,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // CREATE USER OBJECT
     const user = await User.create({
-        fullname: name,
+        fullname,
         username: username.toLowerCase(),
         email,
         password,
