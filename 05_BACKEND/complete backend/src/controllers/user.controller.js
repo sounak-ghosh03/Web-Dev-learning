@@ -4,6 +4,21 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+const generateAccessAndRefreshToken = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false });
+
+        return { accessToken, refreshToken };
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong while generating tokens");
+    }
+};
+
 const registerUser = asyncHandler(async (req, res) => {
     //  USER REGISTRATION LOGIC/STEPS/ALGORITHM
     //  get user data from frontend
@@ -28,7 +43,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required");
     }
 
-    // alternative approach --> 
+    // alternative approach -->
     // if (fullname === "" || email === "" || username === "" || password === "") {
     //     throw new ApiError(400, "Please fill all the fields");
     // }
@@ -43,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // CHECK FOR IMAGES AND AVATAR
-    let coverImageLocalPath = "";          //optional field
+    let coverImageLocalPath = ""; //optional field
     if (
         req.files &&
         Array.isArray(req.files.coverImage) &&
@@ -53,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
     // const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;     //compulsory field
+    const avatarLocalPath = req.files?.avatar[0]?.path; //compulsory field
     if (!avatarLocalPath) {
         throw new ApiError(400, "Please upload both avatar");
     }
@@ -92,4 +107,90 @@ const registerUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, createdUser, "User created successfully"));
 });
 
-export { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+    //  USER LOGIN LOGIC/STEPS/ALGORITHM -->
+    //  request user data from --> frontend
+    //  find the user in the database
+    //  check password
+    //  generate access and refresh token
+    //  send cookie
+    //  return response
+
+    // GET USER DATA FROM FRONTEND
+    const { email, username, password } = req.body;
+
+    if (!(username || email)) {
+        throw new ApiError(400, "Username or Email is required");
+    }
+
+    // FIND THE USER IN THE DATABASE --> username or email
+    const user = await User.findOne({
+        $or: [{ email }, { username }],
+    });
+
+    if (!user) {
+        throw new ApiError(404, "User does not exist");
+    }
+
+    // CHECK PASSWORD
+    const isPasswordValid = await user.isPasswordCorrect(password);
+    if (!isPasswordValid) {
+        throw new ApiError(401, "Invalid user credentials");
+    }
+
+    // GENERATE ACCESS AND REFRESH TOKEN
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+        user._id
+    );
+
+    const loggedInUser = await User.findById(user._id).select(
+        "-password -refreshToken"
+    );
+
+    // SEND COOKIES
+    const options = {
+        httpOnly: true,
+        secure: true,
+    };
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    user: loggedInUser,
+                    accessToken,
+                    refreshToken,
+                },
+                "User logged in Successfully"
+            )
+        );
+});
+
+const logoutUser = asyncHandler(async (req, res) => {
+    User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: undefined,
+            },
+        },
+        {
+            new: true,
+        }
+    );
+    const options = {
+        httpOnly: true,
+        secure: true,
+    };
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, {}, "User logged out successfully"));
+});
+
+
+export { registerUser, loginUser, logoutUser };
