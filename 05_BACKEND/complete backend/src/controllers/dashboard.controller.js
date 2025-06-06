@@ -9,9 +9,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 const getChannelStats = asyncHandler(async (req, res) => {
     // TODO: Get the channel stats like total video views, total subscribers, total videos, total likes etc.
     const { channelId } = req.params;
-    if (!channelId) {
+    if (!isValidObjectId(channelId)) {
         throw new ApiError(400, "Channel id is not found");
     }
+
     const videos = await Video.find({ user: channelId });
 
     const totalViews = videos.reduce((sum, video) => sum + video.views, 0);
@@ -47,6 +48,10 @@ const getChannelVideos = asyncHandler(async (req, res) => {
     const videos = await Video.find({ user: channelId })
         .populate("user")
         .sort({ createdAt: -1 });
+
+    if (videos.length === 0) {
+        throw new ApiError(404, "Videos not found");
+    }
 
     return res
         .status(200)

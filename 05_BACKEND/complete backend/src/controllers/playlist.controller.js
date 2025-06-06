@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 const createPlaylist = asyncHandler(async (req, res) => {
     //TODO: create playlist
     const { name, description } = req.body;
-    if (!name) {
+    if (!name || !description) {
         throw new ApiError(400, "Name is required");
     }
 
@@ -25,13 +25,17 @@ const createPlaylist = asyncHandler(async (req, res) => {
 const getUserPlaylists = asyncHandler(async (req, res) => {
     //TODO: get user playlists
     const { userId } = req.params;
-    if (!userId) {
+    if (!isValidObjectId(userId)) {
         throw new ApiError(400, "User id is not found");
     }
 
-    const playlists = await Playlist.find({ user: userId }).sort({
+    const playlists = await Playlist.findById({ userId }).sort({
         createdAt: -1,
     });
+
+    if (!playlists || playlists.length === 0) {
+        throw new ApiError(404, "Playlists not found");
+    }
 
     return res
         .status(200)
@@ -43,7 +47,7 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 const getPlaylistById = asyncHandler(async (req, res) => {
     //TODO: get playlist by id
     const { playlistId } = req.params;
-    if (!playlistId) {
+    if (!isValidObjectId(playlistId)) {
         throw new ApiError(400, "Playlist id is not found");
     }
 
@@ -60,7 +64,7 @@ const getPlaylistById = asyncHandler(async (req, res) => {
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
     // TODO: add video to playlist
     const { playlistId, videoId } = req.params;
-    if (!(playlistId && videoId)) {
+    if (!isValidObjectId(playlistId && videoId)) {
         throw new ApiError(400, "Playlist id and video id is not found");
     }
 
@@ -69,6 +73,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Playlist not found");
     }
 
+    // check if video is already in playlist and push it if not
     if (!playlist.videos.includes(videoId)) {
         playlist.videos.push(videoId);
         await playlist.save();
@@ -92,7 +97,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
     }
 
     if (playlist.videos.includes(videoId)) {
-        playlist.videos.pull(videoId);
+        playlist.videos.splice(playlist.videos.indexOf(videoId), 1);
         await playlist.save();
     }
 
@@ -104,7 +109,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 const deletePlaylist = asyncHandler(async (req, res) => {
     // TODO: delete playlist
     const { playlistId } = req.params;
-    if (!playlistId) {
+    if (!isValidObjectId(playlistId)) {
         throw new ApiError(400, "Invalid playlist id");
     }
 
@@ -122,7 +127,7 @@ const updatePlaylist = asyncHandler(async (req, res) => {
     //TODO: update playlist
     const { playlistId } = req.params;
     const { name, description } = req.body;
-    if (!playlistId) {
+    if (!isValidObjectId(playlistId)) {
         throw new ApiError(400, "Invalid playlist id");
     }
 
@@ -131,8 +136,8 @@ const updatePlaylist = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Playlist not found");
     }
 
-    playlist.name = name || playlist.name;
-    playlist.description = description || playlist.description;
+    if (name) playlist.name = name || playlist.name;
+    if (description) playlist.description = description || playlist.description;
     await playlist.save();
 
     return res
